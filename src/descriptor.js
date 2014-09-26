@@ -15,8 +15,9 @@ angular.module('akoenig.deckgrid').factory('DeckgridDescriptor', [
 
     'Deckgrid',
     '$templateCache',
+    '$compile',
 
-    function initialize (Deckgrid, $templateCache) {
+    function initialize (Deckgrid, $templateCache, $compile) {
 
         'use strict';
 
@@ -29,8 +30,10 @@ angular.module('akoenig.deckgrid').factory('DeckgridDescriptor', [
             this.restrict = 'AE';
 
             this.template = '<div data-ng-repeat="column in columns" class="{{layout.classList}}">' +
-                                '<div data-ng-repeat="card in column" data-ng-include="cardTemplate"></div>' +
+                                '<div data-ng-repeat="card in column | filter: mother.imageFilters" data-ng-include="cardTemplate"></div>' +
                             '</div>';
+            // https://github.com/akoenig/angular-deckgrid/issues/39
+            $compile(this.template);
 
             this.scope = {
                 'model': '=source'
